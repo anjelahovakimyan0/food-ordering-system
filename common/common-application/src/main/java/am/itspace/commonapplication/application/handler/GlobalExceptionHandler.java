@@ -1,0 +1,64 @@
+package am.itspace.commonapplication.application.handler;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.stream.Collectors;
+
+@Slf4j
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ResponseBody //to create htp response for the return type of this method
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDTO handleException(Exception exception) {
+        log.error(exception.getMessage(), exception);
+        return ErrorDTO.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .message("Unexpected error!") //for security resaons it id not correct to share internal server errors, but it is logged for developers
+                .build();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) //validation exceptions are in case of real bad requests,
+                                            // ValidationException accurs when our set validations on entities handled.
+                                            // If validations in entities failed ValidationException will be thrown
+    public ErrorDTO handleException(ValidationException validationException) {
+        log.error(validationException.getMessage(), validationException);
+        ErrorDTO errorDTO;
+        if (validationException instanceof ConstraintViolationException) {
+            String violations = abstractViolationsFromException((ConstraintViolationException) validationException);
+            log.error(violations, validationException);
+            errorDTO = ErrorDTO.builder()
+                    .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                    .message(violations)
+                    .build();
+        } else {
+            String exceptionMessage = validationException.getMessage();
+            log.error(exceptionMessage, validationException);
+            errorDTO = ErrorDTO.builder()
+                    .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                    .message(exceptionMessage)
+                    .build();
+        }
+        return errorDTO;
+    }
+
+    private String abstractViolationsFromException(ConstraintViolationException validationException) {
+        return validationException.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining("--"));
+    }
+}

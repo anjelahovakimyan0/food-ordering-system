@@ -3,16 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>am.itspace</groupId>
+        <artifactId>infrastructure</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>am.itspace</groupId>
-    <artifactId>food-ordering-system</artifactId>
+    <artifactId>kafka</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>food-ordering-system</name>
-    <description>food-ordering-system</description>
+    <name>kafka</name>
+    <description>kafka</description>
     <url/>
     <licenses>
         <license/>
@@ -27,15 +26,15 @@
         <url/>
     </scm>
     <modules>
-        <module>order-service</module>
-        <module>common</module>
-        <module>infrastructure</module>
+        <module>kafka-config-data</module>
+        <module>kafka-consumer</module>
+        <module>kafka-model</module>
+        <module>kafka-producer</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
         <java.version>17</java.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,6 +48,13 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -57,4 +63,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

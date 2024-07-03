@@ -49,7 +49,7 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItemEntity> items;
 
-    //Equals and hachcode for only primary keys, this time for only unique id
+    //Equals and hashcode for only primary keys, this time for only unique id
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -22,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@IdClass(OrderItemEntityId.class) //this is required when we have multicolumn primary key
+@IdClass(OrderItemEntityId.class) //this is required when we have multicolumn primary keys
 public class OrderItemEntity {
 
     // These two fields will be unique together

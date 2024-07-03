@@ -1,9 +1,8 @@
 package am.itspace.orderapplicationservice.ports.input.message.listener.payment;
 
 import am.itspace.orderapplicationservice.dto.message.PaymentResponse;
-import jakarta.validation.Valid;
 
-public interface PaymentMethodMessageListener {
+public interface PaymentResponseMessageListener {
 
     void paymentCompleted(PaymentResponse paymentResponse);
 

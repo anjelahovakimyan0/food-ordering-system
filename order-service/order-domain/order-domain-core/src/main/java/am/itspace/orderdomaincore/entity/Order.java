@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Builder
 public class Order extends AggregateRoot<OrderId> {
 
     private final CustomerId customerId;
@@ -32,6 +31,8 @@ public class Order extends AggregateRoot<OrderId> {
     private OrderStatus orderStatus;
 
     private List<String> failureMessages;
+
+    public static final String FAILURE_MESSAGE_DELIMITER = ",";
 
     public void pay() {
         if (orderStatus != OrderStatus.PENDING) {
@@ -128,6 +129,86 @@ public class Order extends AggregateRoot<OrderId> {
 
         if (this.failureMessages == null) {
             this.failureMessages = failureMessages;
+        }
+    }
+
+    private Order(Builder builder) {
+        super.setId(builder.orderId);
+        customerId = builder.customerId;
+        restaurantId = builder.restaurantId;
+        deliveryAddress = builder.deliveryAddress;
+        price = builder.price;
+        items = builder.items;
+        trackingId = builder.trackingId;
+        orderStatus = builder.orderStatus;
+        failureMessages = builder.failureMessages;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private OrderId orderId;
+        private CustomerId customerId;
+        private RestaurantId restaurantId;
+        private StreetAddress deliveryAddress;
+        private Money price;
+        private List<OrderItem> items;
+        private TrackingId trackingId;
+        private OrderStatus orderStatus;
+        private List<String> failureMessages;
+
+        private Builder() {
+        }
+
+        public Builder orderId(OrderId val) {
+            orderId = val;
+            return this;
+        }
+
+        public Builder customerId(CustomerId val) {
+            customerId = val;
+            return this;
+        }
+
+        public Builder restaurantId(RestaurantId val) {
+            restaurantId = val;
+            return this;
+        }
+
+        public Builder deliveryAddress(StreetAddress val) {
+            deliveryAddress = val;
+            return this;
+        }
+
+        public Builder price(Money val) {
+            price = val;
+            return this;
+        }
+
+        public Builder items(List<OrderItem> val) {
+            items = val;
+            return this;
+        }
+
+        public Builder trackingId(TrackingId val) {
+            trackingId = val;
+            return this;
+        }
+
+        public Builder orderStatus(OrderStatus val) {
+            orderStatus = val;
+            return this;
+        }
+
+        public Builder failureMessages(List<String> val) {
+            failureMessages = val;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(this);
         }
     }
 }

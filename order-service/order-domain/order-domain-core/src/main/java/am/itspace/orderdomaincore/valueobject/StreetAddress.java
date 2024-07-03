@@ -24,7 +24,6 @@ public class StreetAddress {
         this.city = city;
     }
 
-
     // Equals and hashcode methods without UUID id
     @Override
     public boolean equals(Object o) {

@@ -6,7 +6,6 @@ import am.itspace.orderdomaincore.exception.OrderDomainException;
 import am.itspace.orderdomaincore.valueobject.OrderItemId;
 import am.itspace.orderdomaincore.valueobject.StreetAddress;
 import am.itspace.orderdomaincore.valueobject.TrackingId;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
